@@ -16,7 +16,7 @@ USE_SUBSCRIPTION=true
 --tempLocation=${PIPELINE_FOLDER}/temp \
 --templateLocation=${PIPELINE_FOLDER}/template \
 --runner=${RUNNER} \
---useSubscription=${USE_SUBSCRIPTION} \
+--useSubscription=${USE_SUBSCRIPTION}"
 ```
 
 ## Execute the dataflow job
@@ -27,4 +27,19 @@ gcloud dataflow jobs run ${JOB_NAME} \
 --worker-region=us-west1 \
 --region=us-west1 \
 --parameters "inputSubscription=projects/${PROJECT_ID}/subscriptions/sample-dataflow-subscription,outputTableSpec=${PROJECT_ID}:dataflowsample.pubsubsourced"
+```
+
+
+## Send a message
+```sh
+message=$(cat <<EOF
+{
+"id": "message-id",
+"name": "message-name",
+"description": "message-description"
+}
+EOF
+)
+
+gcloud pubsub topics publish dataflow-sample-topic --message=$message
 ```
